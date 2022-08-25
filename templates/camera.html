@@ -1,0 +1,46 @@
+<html>
+ <head>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <style>
+      img { display: block;
+            margin-left: auto;
+            margin-right: auto;
+           }
+      h1,h2 {text-align: center;}
+    </style>
+  </head>
+  <body>      
+     <h1> GHANA WATER COMPANY </h1>
+      <h2> Water Level monitoring </h2>
+     <img id="bg" src="{{ url_for('video_feed') }}" style="max-width:80vw;" style="max-height:80%;" >      
+     <h2 id="distance"> Waiting for data </h2>
+  </body>
+  
+  
+    <script>
+        let url = window.location.href.toString();
+        console.log(url);
+        
+        async function fetchData(url = ""){
+            try {
+                let res = await fetch(url);
+                let data = await  res.text();
+                return  await data;
+            } 
+            catch (error) {
+                return "";
+            }
+        }
+        
+        async function getDistance(){
+            let distanceUrl = url + "/get_distance";            
+            let dirData = await fetchData(distanceUrl);
+            console.log(dirData);
+            document.querySelector('#distance').innerHTML = dirData;
+        }
+        getDistance()
+        
+        //run time Function
+        setInterval('getDistance()', 1000);
+    </script>
+</html>
